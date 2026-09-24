@@ -1,0 +1,102 @@
+name: train_x4
+model_type: SHLModel
+scale: 4
+num_gpu: 1
+manual_seed: 42
+# dataset and data loader settings
+datasets:
+  train:
+    task: SR
+    name: AID
+    type: PairedImageDataset
+    dataroot_gt: /data/zkh/SR/datasets/AID/train/GT
+    dataroot_lq: /data/zkh/SR/datasets/AID/train/x4
+    io_backend:
+      type: disk
+
+    gt_size: 128
+    use_hflip: true
+    use_rot: true
+
+    # data loader
+    use_shuffle: true
+    num_worker_per_gpu: 8
+    batch_size_per_gpu: 32
+    dataset_enlarge_ratio: 100
+    prefetch_mode: 'cuda'
+    pin_memory: true
+
+  val:
+    name: AID
+    type: PairedImageDataset
+    dataroot_gt: /data/zkh/SR/datasets/AID/val/GT
+    dataroot_lq: /data/zkh/SR/datasets/AID/val/x4
+    io_backend:
+      type: disk
+
+# network structures
+network_g:
+  type: SHL
+  upscale: 4
+
+# path
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+  resume_state: ~
+
+# training settings
+train:
+  optim_g:
+    type: Adam
+    lr: !!float 2e-4
+    weight_decay: 0
+    betas: [0.9, 0.99]
+
+  scheduler:
+    type: MultiStepLR
+    milestones: [125000, 200000, 225000, 237500]
+    gamma: 0.5
+
+  total_iter: 250000
+
+
+  # losses
+  pixel_opt:
+    type: L1Loss
+    loss_weight: 1.0
+    gradient_weight : 0.1
+    frequency_weight : 0.05
+    kernel_size : 5
+    reduction: mean
+# validation settings
+val:
+  val_freq: !!float 2500
+  save_img: false
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr_pt
+      crop_border: 4
+      test_y_channel: true
+
+    ssim:
+      type: calculate_ssim_pt
+      crop_border: 4
+      test_y_channel: true
+
+
+
+# logging settings
+logger:
+  print_freq: 100
+  save_checkpoint_freq: !!float 2500
+  use_tb_logger: true
+  wandb:
+    project: ~
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500

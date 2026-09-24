@@ -1,0 +1,41 @@
+name: test_x4
+model_type: SHLModel
+scale: 4
+num_gpu: 1
+manual_seed: 42
+
+datasets:
+  test:
+    name: AID
+    type: PairedImageDataset
+    dataroot_gt: /data/zkh/MixDataset/test/AID/hr
+    dataroot_lq: /data/zkh/MixDataset/test/AID/x4
+    io_backend:
+      type: disk
+
+
+# network structures
+network_g:
+  type: SHL
+  upscale: 4
+
+# path
+path:
+  pretrain_network_g: /data/zkh/SHL-main/experiments/train_x4_AID/best.pth
+  strict_load_g: true
+  results_root: /data/zkh/SHL-main/results/AID/x4
+
+# validation settings
+val:
+  save_img: true
+  suffix: ~
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr_pt
+      crop_border: 4
+      test_y_channel: true
+    ssim:
+      type: calculate_ssim_pt
+      crop_border: 4
+      test_y_channel: true
