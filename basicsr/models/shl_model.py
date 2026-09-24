@@ -130,9 +130,7 @@ class SHLModel(BaseModel):
             self.net_g.train()
 
     def test_selfensemble(self):
-        # TODO: to be tested
-        # 8 augmentations
-        # modified from https://github.com/thstkdgus35/EDSR-PyTorch
+
 
         def _transform(v, op):
             # if self.precision != 'single': v = v.float()
@@ -224,7 +222,7 @@ class SHLModel(BaseModel):
 
                     else:
                         save_img_path = osp.join(self.opt['path']['visualization'], dataset_name,
-                                                 f'{img_name}_{self.opt["name"]}.png')
+                                                 f'{img_name}.png')
                 imwrite(sr_img, save_img_path)
 
             if with_metrics:
