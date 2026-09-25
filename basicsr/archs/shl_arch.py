@@ -592,7 +592,7 @@ class SHL(nn.Module):
         torch.cuda.synchronize() if device.type == 'cuda' else None
         end_time = time.time()
         
-        avg_time = (end_time - start_time) * 1000 / repeats  # 转换为毫秒
+        avg_time = (end_time - start_time) * 1000 / repeats 
         return avg_time
     
     def __repr__(self):
