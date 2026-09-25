@@ -29,4 +29,9 @@ This repository is an official implementation of the paper "Learning semantic-sp
 
 ## Acknowledgements
 
-This code is built on [BasicSR](https://github.com/XPixelGroup/BasicSR). Thanks for their good work.
+This code is built on 
+
+- [BasicSR](https://github.com/XPixelGroup/BasicSR).
+- [CATANet](https://github.com/EquationWalker/CATANet).
+
+Thanks for their good work.
