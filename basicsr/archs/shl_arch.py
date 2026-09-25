@@ -487,7 +487,7 @@ class SHL(nn.Module):
    
         for i in range(self.block_num):
             self.blocks.append(nn.ModuleList([
-                SemanticSpatialAwareTAB(
+                SGAB(
                     self.dim, self.qk_dim, self.mlp_dim,
                     self.heads, self.n_iters[i], 
                     self.num_tokens[i], self.group_sizes[i],
